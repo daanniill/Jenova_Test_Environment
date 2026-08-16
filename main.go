@@ -3,12 +3,20 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
+	router := chi.NewRouter()
+	router.Use(middleware.Logger) // enable logging
+
+	router.Get("/echo", basicHandler)
+
 	server := &http.Server{
 		Addr: ":1003",
-		Handler: http.HandlerFunc(basicHandler),
+		Handler: router,
 	}
 
 	err := server.ListenAndServe()
