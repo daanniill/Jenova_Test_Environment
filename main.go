@@ -1,30 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/daanniill/Jenova_Test_Environment/application"
 )
 
 func main() {
-	router := chi.NewRouter()
-	router.Use(middleware.Logger) // enable logging
+	app := application.New()
 
-	router.Get("/echo", basicHandler)
-
-	server := &http.Server{
-		Addr: ":1003",
-		Handler: router,
-	}
-
-	err := server.ListenAndServe()
+	err := app.Start(context.TODO())
 	if err != nil {
-		fmt.Println("failed to listen to server", err)
+		fmt.Println("failed to start app", err)
 	}
+
 }
 
-func basicHandler(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("echoooo"))
-}
